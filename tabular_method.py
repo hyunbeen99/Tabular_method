@@ -1,26 +1,30 @@
-# change decimal to 4bit binary
-def decTobin(n):
-    if (n == 1):
-        return '1'
-    ans = ''
-    while True:
-        if n % 2 == 0:
-            ans+='0'
-        else:
-            ans+='1'
-        n = n / 2
+# change decximal to 4bit binary
+def dec2bin(n):
+    result = ['0','0','0']    
+    bStr = ""
+    if n < 0 :
+        raise ValueError, "must be a positive integer"
 
-        if n==1:
-            ans+='1'
-            return ans[::-1]
+    if n == 0 :
+        return '0000'
+
+    while n > 0 :
+        bStr = str( n % 2 ) + bStr
+        n = n // 2
+    
+    result.extend(list(bStr))
+    while (len(result) != 4):
+        del result[0]
+
+    return ''.join(result)
 
 # to get HD
 def hammingDistance(a, b):
     count = 0
     first = []
     second = []
-    first.append(decTobin(a))
-    second.append(decTobin(b))
+    first.append(dec2bin(a))
+    second.append(dec2bin(b))
 
     for i in range(0,4):
         if (first[i] != second[i]):
@@ -36,22 +40,20 @@ def numOfones(num):
     return numcount
 
 def primeImplicants(term):
-    terms = []      # ['0000', '0101', '0001' ...... '1111']
-    orderterms = []
-    for i in term:
-        terms.append(decTobin(i))
-
-    for j in terms:
-        if(numOfones(j) == 0):
-            orderterms[0].append(list(i))
-
+    sortedTerms = []      # ['0000'], ['0101'], ['0001'] ...... ['1111']
+    
+    for i in range(0,16):
+        if(numOfones(term) == i):
+            sortedTerms[i].append(numOfones(term))
+    print(sortedTerms)
 
 def main():
     #input to strings
     minterms = raw_input("(ex, 0 1 2 3 4 5 6) >>> ")
     minterms = minterms.split(" ")
     for minterm in minterms:
-        print(decTobin(int(minterm)))
+        binary = dec2bin(int(minterm))
+        primeImplicants(binary)
 
 if __name__ == "__main__":
     main()
