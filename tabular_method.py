@@ -4,10 +4,8 @@ def dec2bin(n):
     bStr = ""
     if n < 0 :
         raise ValueError, "must be a positive integer"
-
     if n == 0 :
         return '0000'
-
     while n > 0 :
         bStr = str( n % 2 ) + bStr
         n = n // 2
@@ -21,39 +19,58 @@ def dec2bin(n):
 # to get HD
 def hammingDistance(a, b):
     count = 0
-    first = []
-    second = []
-    first.append(dec2bin(a))
-    second.append(dec2bin(b))
+    firstTerm = list(a)
+    secondTerm = list(b)
 
     for i in range(0,4):
-        if (first[i] != second[i]):
+        if (firstTerm[i] != secondTerm[i]):
             count += 1
+    return count
 
 # count # of 1 for each terms     
 def numOfones(num):
     numcount = 0
-
     for i in num:
         if (int(i) == 1):
             numcount += 1
     return numcount
 
-def primeImplicants(term):
-    sortedTerms = []      # ['0000'], ['0101'], ['0001'] ...... ['1111']
-    
-    for i in range(0,16):
-        if(numOfones(term) == i):
-            sortedTerms[i].append(numOfones(term))
-    print(sortedTerms)
+# set terms in order of the numOfones in each terms before grouping
+def sortingTermList(term):
+    sortedTerm = []
+  
+    for i in range(len(term)):
+        sortedTerm.append({numOfones(term[i]) : term[i]})
+        sortedTerm.sort()
 
+    #return sortedTerm
+    print(sortedTerm)
+
+
+''' TODO
+    setTermList();
+    grouping();
+    makePIchart();
+    printPIchart();
+    findEPInPI();
+    printEPInPI();
+    findlogic();
+'''
 def main():
-    #input to strings
+    #raw_input; input minterms to strings
+    binlist = []
     minterms = raw_input("(ex, 0 1 2 3 4 5 6) >>> ")
+    donCares = raw_input("(ex, 0 1) >> ")
     minterms = minterms.split(" ")
+    donCares = donCares.split(" ")
+
+    minterms.extend(donCares)
+
     for minterm in minterms:
         binary = dec2bin(int(minterm))
-        primeImplicants(binary)
+        binlist.append(binary)
+
+    sortingTermList(binlist)
 
 if __name__ == "__main__":
     main()
